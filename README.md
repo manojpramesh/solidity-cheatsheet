@@ -3,6 +3,18 @@
 # Solidity cheatsheet
 Cheat sheet for solidity
 
+### Version
+
+```pragma solidity ^0.4.18;```  will compile with a compiler version  > 0.4.0 and < 0.5.0.
+
+### Import files
+
+```import "filename";```
+
+```import * as symbolName from "filename";``` or ```import "filename" as symbolName;```
+
+```import {symbol1 as alias, symbol2} from "filename";```
+
 ### Functions
 
 #### Access modifiers
