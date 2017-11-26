@@ -1,9 +1,19 @@
 ### WIP Version. Feel free to contribute
 
-# Solidity cheatsheet
-Cheat sheet for solidity
+# Solidity Cheatsheet
 
-## Version
+## Motivation
+
+This document is a cheatsheet for **Solidity** that you can use to write **Smart Contracts** for **Ethereum** based blockchain.
+
+This guide is not intended to teach you Solidity from the ground up, but to help developers with basic knowledge who may struggle to get familiar with Smart Contracts and Blockchain because of the Solidity concepts used.
+
+> **Note:** If you have basic knowledge in JavaScript, it is more easy to learn Solidity.
+
+## Table of contents
+Comming soon
+
+## Version pragma
 
 `pragma solidity ^0.4.18;`  will compile with a compiler version  > 0.4.0 and < 0.5.0.
 
