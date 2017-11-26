@@ -2,6 +2,7 @@
 
 # Solidity Cheatsheet
 
+
 ## Motivation
 
 This document is a cheatsheet for **Solidity** that you can use to write **Smart Contracts** for **Ethereum** based blockchain.
@@ -10,12 +11,15 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 > **Note:** If you have basic knowledge in JavaScript, it is more easy to learn Solidity.
 
+
 ## Table of contents
 Comming soon
+
 
 ## Version pragma
 
 `pragma solidity ^0.4.18;`  will compile with a compiler version  > 0.4.0 and < 0.5.0.
+
 
 ## Import files
 
@@ -34,11 +38,8 @@ Comming soon
 
 Operators:
 
-- ! (logical negation)
-- && (AND)
-- || (OR)
-- == (equality)
-- != (inequality)
+- Logical : `!` (logical negation), `&&` (AND), `||` (OR)
+- Comparisons : `==` (equality), `!=` (inequality)
 
 ### Integer
 
@@ -48,9 +49,9 @@ Signed   : `int8  | int16  | int32  | int64  | int128  | int256(uint) `
 
 Operators:
 
-- Comparisons: <=, <, ==, !=, >= and >
-- Bit operators: &, |, ^ (bitwise exclusive or) and ~ (bitwise negation)
-- Arithmetic operators: +, -, unary -, unary +, *, /, %, ** (exponentiation), << (left shift) and >> (right shift)
+- Comparisons: `<=`, `<`, `==`, `!=`, `>=` and `>`
+- Bit operators: `&`, `|`, `^` (bitwise exclusive or) and `~` (bitwise negation)
+- Arithmetic operators: `+`, `-`, unary `-`, unary `+`, `*`, `/`, `%`, `**` (exponentiation), `<<` (left shift) and `>>` (right shift)
 
 ### Address
 
@@ -58,7 +59,7 @@ Operators:
 
 Operators:
 
-- Comparisons: <=, <, ==, !=, >= and >
+- Comparisons: `<=`, `<`, `==`, `!=`, `>=` and `>`
 
 Methods:
 
@@ -69,6 +70,15 @@ Methods:
 - `<address>.callcode(...) returns (bool)`: issue low-level CALLCODE, returns false on failure
 - `<address>.delegatecall(...) returns (bool)`: issue low-level DELEGATECALL, returns false on failure
 
+### Array
+
+Arrays can have fixed size or they can be dynamic.
+
+```
+uint[] dynamicSizeArray;
+
+uint[7] fixedSizeArray;
+```
 
 ### Fixed byte arrays
 
@@ -87,30 +97,51 @@ Members
 ### Dynamic byte arrays
 
 `bytes`: Dynamically-sized `byte` array. It is similar to `byte[]`, but it is packed tightly in calldata. Not a value-type!
+
 `string`: Dynamically-sized UTF-8-encoded string. It is equal to `bytes` but does not allow length or index access. Not a value-type!
 
 ### Enum
 
-Declaration:
+Enum works just like every other language.
 
-`enum ActionChoices { GoLeft, GoRight, GoStraight, SitStill }`
+```
+enum ActionChoices { 
+  GoLeft, 
+  GoRight, 
+  GoStraight, 
+  SitStill 
+}
 
-Usage:
-
-`ActionChoices choice = ActionChoices.GoStraight;`
+ActionChoices choice = ActionChoices.GoStraight;
+```
 
 ### Struct
 
+New types can be declared using struct.
+
+```
+struct Funder {
+    address addr;
+    uint amount;
+}
+
+Funder funders;
+```
+
 ### Mapping
 
-### Array
+Declared as `mapping(_KeyType => _ValueType)`
+
+Mappings can be seen as **hash tables** which are virtually initialized such that every possible key exists and is mapped to a value.
+
+**key** can be almost any type except for a mapping, a dynamically sized array, a contract, an enum and a struct. **value** can actually be any type, including mappings.
 
 
 ## Functions
 
 ### Structure
 
-```function (<parameter types>) {internal|external|public|private} [pure|constant|view|payable] [returns (<return types>)]```
+`function (<parameter types>) {internal|external|public|private} [pure|constant|view|payable] [returns (<return types>)]`
 
 ### Access modifiers
 
@@ -157,20 +188,108 @@ contract OracleUser {
 
 ### Function Modifier
 
-### Pure | View | Constant | Payable
+Modifier can automatically check a condition prior to executing the function.
 
+```
+modifier onlyOwner {
+    require(msg.sender == owner);
+    _;
+}
+
+function close() onlyOwner {
+    selfdestruct(owner);
+}
+```
+
+### View or Constant Functions
+
+Functions can be declared `view` or `constant` in which case they promise not to modify the state.
+
+```
+function f(uint a) view returns (uint) {
+    return a * b;
+}
+```
+
+> The compiler does not enforce yet that a `view` method is not modifying state.
+
+### Pure Functions
+
+Functions can be declared `pure` in which case they promise not to read from or modify the state.
+
+```
+function f(uint a) pure returns (uint) {
+    return a * 42;
+}
+```
+
+### Payable Functions
+
+Functions that receive `Ether` are marked as `payable` function.
+
+### Fallback Function
+
+A contract can have exactly one **unnamed function**. This function cannot have arguments and cannot return anything. It is executed on a call to the contract if none of the other functions match the given function identifier (or if no data was supplied at all).
+
+```
+function() {
+  // Do something
+}
+```
+
+## Events
 
 ## Library
 
 ## Interface
 
+## Error Handling
 
-### TODO
+- `assert(bool condition)`: throws if the condition is not met - to be used for internal errors.
+- `require(bool condition)`: throws if the condition is not met - to be used for errors in inputs or external components.
+- `revert()`: abort execution and revert state changes
 
-- events
-- enums
-- functions
-- library
-- modifiers
-- struct
-- mapping
+
+## Global variables
+
+### Block variables
+
+- `block.blockhash(uint blockNumber) returns (bytes32)`: hash of the given block - only works for 256 most recent blocks excluding current
+- `block.coinbase (address)`: current block miner’s address
+- `block.difficulty (uint)`: current block difficulty
+- `block.gaslimit (uint)`: current block gaslimit
+- `block.number (uint)`: current block number
+- `block.timestamp (uint)`: current block timestamp as seconds since unix epoch
+- `now (uint)`: current block timestamp (alias for `block.timestamp`)
+
+### Transaction variables
+
+- `msg.data (bytes)`: complete calldata
+- `msg.gas (uint)`: remaining gas
+- `msg.sender (address)`: sender of the message (current call)
+- `msg.sig (bytes4)`: first four bytes of the calldata (i.e. function identifier)
+- `msg.value (uint)`: number of wei sent with the message
+- `tx.gasprice (uint)`: gas price of the transaction
+- `tx.origin (address)`: sender of the transaction (full call chain)
+
+### Mathematical and Cryptographic Functions
+
+- `addmod(uint x, uint y, uint k) returns (uint)`:
+   compute (x + y) % k where the addition is performed with arbitrary precision and does not wrap around at 2**256.
+- `mulmod(uint x, uint y, uint k) returns (uint)`:
+   compute (x * y) % k where the multiplication is performed with arbitrary precision and does not wrap around at 2**256.
+- `keccak256(...) returns (bytes32)`:
+   compute the Ethereum-SHA-3 (Keccak-256) hash of the (tightly packed) arguments
+- `sha256(...) returns (bytes32)`:
+   compute the SHA-256 hash of the (tightly packed) arguments
+- `sha3(...) returns (bytes32)`:
+   alias to keccak256
+- `ripemd160(...) returns (bytes20)`:
+   compute RIPEMD-160 hash of the (tightly packed) arguments
+- `ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address)`:
+   recover the address associated with the public key from elliptic curve signature or return zero on error (example usage)
+   
+### Contract Related
+- `this (current contract’s type)`: the current contract, explicitly convertible to Address
+- `selfdestruct(address recipient)`: destroy the current contract, sending its funds to the given Address
+- `suicide(address recipient)`: alias to selfdestruct. Soon to deprecate.
