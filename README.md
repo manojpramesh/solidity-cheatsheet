@@ -237,11 +237,72 @@ function() {
 }
 ```
 
+## Abstract Contracts
+
+Contracts that contains implemented and non-implemented functions. Such contracts cannot be compiled, but they can be used as base contracts.
+
+```
+pragma solidity ^0.4.0;
+
+contract A {
+    function C() returns (bytes32);
+}
+
+contract A is B {
+    function C() returns (bytes32) { return "c"; }
+}
+```
+
+## Interface
+
+`Interfaces` are similar to abstract contracts, but they have restrictions:
+
+- Cannot have any functions implemented.
+- Cannot inherit other contracts or interfaces.
+- Cannot define constructor.
+- Cannot define variables.
+- Cannot define structs.
+- Cannot define enums.
+
+```
+pragma solidity ^0.4.11;
+
+interface Token {
+    function transfer(address recipient, uint amount);
+}
+```
+
 ## Events
+
+Events allow the convenient usage of the EVM logging facilities, which in turn can be used to “call” JavaScript callbacks in the user interface of a dapp, which listen for these events.
+
+Up to three parameters can receive the attribute indexed which will cause the respective arguments to be searched for
+
+> All non-indexed arguments will be stored in the data part of the log.
+
+```
+pragma solidity ^0.4.0;
+
+contract ClientReceipt {
+    event Deposit(
+        address indexed _from,
+        bytes32 indexed _id,
+        uint _value
+    );
+
+    function deposit(bytes32 _id) payable {
+        Deposit(msg.sender, _id, msg.value);
+    }
+}
+```
 
 ## Library
 
-## Interface
+Libraries are similar to contracts, but their purpose is that they are deployed only once at a specific address.
+
+## Using - For
+
+Comming soon
 
 ## Error Handling
 
