@@ -434,6 +434,23 @@ function() {
 
 ### Creating contracts using `new`
 
+Contract can be created from another contract using `new` keyword. Source of the contract has to be known in advance.
+
+```
+contract A {
+    function add(uint _a, uint _b) returns (uint) {
+        return _a + _b;
+    }
+}
+
+contract C {
+    address a;
+    function f(uint _a) {
+        a = new A();
+    }
+}
+```
+
 ### Contract Inheritance
 
 Solidity supports multiple inheritance and polymorphism.
