@@ -63,12 +63,50 @@ Operators:
 
 Methods:
 
+#### balance
+
 - `<address>.balance (uint256)`: balance of the Address in Wei
+
+#### transfer and send
+
 - `<address>.transfer(uint256 amount)`: send given amount of Wei to Address, throws on failure
 - `<address>.send(uint256 amount) returns (bool)`: send given amount of Wei to Address, returns false on failure
+
+#### call
 - `<address>.call(...) returns (bool)`: issue low-level CALL, returns false on failure
-- `<address>.callcode(...) returns (bool)`: issue low-level CALLCODE, returns false on failure
+
+#### delegatecall
+
 - `<address>.delegatecall(...) returns (bool)`: issue low-level DELEGATECALL, returns false on failure
+
+Delegatecall uses code of the target address and all other aspects (storage, balance, ...) are taken from the calling contract. The purpose of delegatecall is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
+
+```
+contract A {
+  uint value;
+  address public sender;
+  address a = "0x"; // address of contract B
+  function makeDelegateCall(uint _value) {
+    a.delegatecall(bytes4(keccak256("setValue(uint)")), _value); // Value of A is modified
+  }
+}
+
+contract B {
+  uint value;
+  address public sender;
+  setValue(uint _value) {
+    value = _value;
+    sender = msg.sender; // msg.sender is preserved in delegatecall. It was not available in callcode.
+  }
+}
+```
+
+> gas() option is available for call, callcode and delegatecall. value() option is not supported for delegatecall.
+
+#### callcode
+- `<address>.callcode(...) returns (bool)`: issue low-level CALLCODE, returns false on failure
+
+> Prior to homestead, only a limited variant called `callcode` was available that did not provide access to the original `msg.sender` and `msg.value` values.
 
 ### Array
 
