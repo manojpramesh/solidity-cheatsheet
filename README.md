@@ -12,7 +12,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 ## Table of contents
 
-- [Solidity Cheatsheet](#solidity-cheatsheet)
+- [Solidity Cheatsheet and Best practices](#solidity-cheatsheet-and-best-practices)
   * [Motivation](#motivation)
   * [Table of contents](#table-of-contents)
   * [Version pragma](#version-pragma)
@@ -32,17 +32,31 @@ This guide is not intended to teach you Solidity from the ground up, but to help
     + [Enum](#enum)
     + [Struct](#struct)
     + [Mapping](#mapping)
-  * [Expressions and Control Structures](#expressions-and-control-structures)
+  * [Control Structures](#control-structures)
   * [Functions](#functions)
     + [Structure](#structure)
     + [Access modifiers](#access-modifiers)
+    + [Parameters](#parameters)
+      - [Input parameters](#input-parameters)
+      - [Output parameters](#output-parameters)
+    + [Contructor](#contructor)
+    + [Function Calls](#function-calls)
+      - [Internal Function Calls](#internal-function-calls)
+      - [External Function Calls](#external-function-calls)
+      - [Named Calls](#named-calls)
+      - [Unnamed function parameters](#unnamed-function-parameters)
     + [Function type](#function-type)
     + [Function Modifier](#function-modifier)
     + [View or Constant Functions](#view-or-constant-functions)
     + [Pure Functions](#pure-functions)
     + [Payable Functions](#payable-functions)
     + [Fallback Function](#fallback-function)
-  * [Abstract Contracts](#abstract-contracts)
+  * [Contracts](#contracts)
+    + [Creating contracts using `new`](#creating-contracts-using--new-)
+    + [Contract Inheritance](#contract-inheritance)
+      - [Multiple inheritance](#multiple-inheritance)
+      - [Constructor of base class](#constructor-of-base-class)
+    + [Abstract Contracts](#abstract-contracts)
   * [Interface](#interface)
   * [Events](#events)
   * [Library](#library)
@@ -55,6 +69,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
     + [Contract Related](#contract-related)
 - [Security](#security)
 - [Best practices](#best-practices)
+- [Tips & Tricks](#tips---tricks)
 
 
 ## Version pragma
@@ -216,8 +231,18 @@ Mappings can be seen as **hash tables** which are virtually initialized such tha
 **key** can be almost any type except for a mapping, a dynamically sized array, a contract, an enum and a struct. **value** can actually be any type, including mappings.
 
 
-## Expressions and Control Structures
-comming soon
+## Control Structures
+
+Most of the control structures from JavaScript are available in Solidity except for `switch` and `goto`. 
+
+- `if` `else`
+- `while`
+- `do`
+- `for`
+- `break`
+- `continue`
+- `return`
+- `? :`
 
 ## Functions
 
@@ -231,6 +256,92 @@ comming soon
 - ```private``` - Accessible only from this contract
 - ```internal``` - Accessible only from this contract and contracts inheriting from it
 - ```external``` - Cannot be accessed internally, only externally. Recommended to reduce gas. Access internally with `this.f`.
+
+### Parameters
+
+#### Input parameters
+
+Parameters are declared just like variables and are `memory` variables.
+
+```
+function f(uint _a, uint _b) {}
+```
+
+#### Output parameters
+
+Output parameters are declared after `returns` keyword
+
+```
+function f(uint _a, uint _b) returns (uint _sum) {
+   _sum = _a + _b;
+}
+```
+
+Output can also be specified using `return` statement. In that case, we can omit parameter name `returns (uint)`.
+
+Multiple return types are possible with `return (v0, v1, ..., vn)`.
+
+
+### Contructor
+
+Function that has same name as contract. Executed during contract deployment.
+
+```
+contract C {
+   address owner;
+   uint status;
+   function C(uint _status) {
+       owner = msg.sender;
+       status = _status;
+   }
+}
+```
+
+### Function Calls
+
+#### Internal Function Calls
+
+Functions of the current contract can be called directly(internally - via jumps) and also recursively
+
+```
+contract C {
+    function funA() returns (uint) { 
+       return 5; 
+    }
+    
+    function FunB(uint _a) returns (uint ret) { 
+       return funA() + _a; 
+    }
+}
+```
+
+#### External Function Calls
+
+`this.g(8);` and `c.g(2);` (where c is a contract instance) are also valid function calls, but, the function will be called “externally”, via a message call.
+
+> `.gas()` and `.value()` can also be used with external function calls.
+
+#### Named Calls
+
+Function call arguments can also be given by name in any order as below.
+
+```
+function f(uint a, uint b) {  }
+
+function g() {
+    f({b: 1, a: 2});
+}
+```
+
+#### Unnamed function parameters
+
+Parameters will be present on the stack, but they are not accessible.
+
+```
+function f(uint a, uint) returns (uint) {
+    return a;
+}
+```
 
 ### Function type
 
@@ -319,7 +430,57 @@ function() {
 }
 ```
 
-## Abstract Contracts
+## Contracts
+
+### Creating contracts using `new`
+
+### Contract Inheritance
+
+Solidity supports multiple inheritance and polymorphism.
+
+```
+contract owned {
+    function owned() { owner = msg.sender; }
+    address owner;
+}
+
+contract mortal is owned {
+    function kill() {
+        if (msg.sender == owner) selfdestruct(owner);
+    }
+}
+
+contract final is mortal {
+    function kill() { 
+        super.kill(); // Calls kill() of mortal.
+    }
+}
+```
+
+#### Multiple inheritance
+
+```
+contract A {}
+contract B {}
+contract C is A, B {}
+```
+
+#### Constructor of base class
+
+```
+contract A {
+    uint a;
+    function A(uint _a) { a = _a; }
+}
+
+contract B is A(1) {
+    function B(uint _b) A(_b) {
+    }
+}
+```
+
+
+### Abstract Contracts
 
 Contracts that contains implemented and non-implemented functions. Such contracts cannot be compiled, but they can be used as base contracts.
 
@@ -380,11 +541,44 @@ contract ClientReceipt {
 
 ## Library
 
-Libraries are similar to contracts, but their purpose is that they are deployed only once at a specific address.
+Libraries are similar to contracts, but they are deployed only once at a specific address and their code is used with [`delegatecall`](#delegatecall) (`callcode`). 
+
+```
+library arithmatic {
+    function add(uint _a, uint _b) returns (uint) {
+        return _a + _b;
+    }
+}
+
+contract C {
+    uint sum;
+
+    function f() {
+        sum = arithmatic.add(2, 3);
+    }
+}
+```
 
 ## Using - For
 
-Comming soon
+`using A for B;` can be used to attach library functions to any type.
+
+```
+library arithmatic {
+    function add(uint _a, uint _b) returns (uint) {
+        return _a + _b;
+    }
+}
+
+contract C {
+    using arithmatic for uint;
+    
+    uint sum;
+    function f(uint _a) {
+        sum = _a.add(3);
+    }
+}
+```
 
 ## Error Handling
 
@@ -392,6 +586,17 @@ Comming soon
 - `require(bool condition)`: throws if the condition is not met - to be used for errors in inputs or external components.
 - `revert()`: abort execution and revert state changes
 
+```
+ function sendHalf(address addr) payable returns (uint balance) {
+    require(msg.value % 2 == 0); // Only allow even numbers
+    uint balanceBeforeTransfer = this.balance;
+    addr.transfer(msg.value / 2);
+    assert(this.balance == balanceBeforeTransfer - msg.value / 2);
+    return this.balance;
+}
+```
+
+> Catching exceptions is not yet possible.
 
 ## Global variables
 
@@ -439,7 +644,10 @@ Comming soon
 
 
 # Security 
-comming soon
+Work in progress
 
 # Best practices
-comming soon
+Work in progress
+
+# Tips & Tricks
+Work in progress
