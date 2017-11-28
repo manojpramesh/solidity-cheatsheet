@@ -1,6 +1,4 @@
-### WIP Version. Feel free to contribute
-
-# Solidity Cheatsheet
+# Solidity Cheatsheet and Best practices
 
 
 ## Motivation
