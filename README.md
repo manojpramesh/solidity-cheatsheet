@@ -13,7 +13,50 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 
 ## Table of contents
-Comming soon
+
+- [Solidity Cheatsheet](#solidity-cheatsheet)
+  * [Motivation](#motivation)
+  * [Table of contents](#table-of-contents)
+  * [Version pragma](#version-pragma)
+  * [Import files](#import-files)
+  * [Types](#types)
+    + [Boolean](#boolean)
+    + [Integer](#integer)
+    + [Address](#address)
+      - [balance](#balance)
+      - [transfer and send](#transfer-and-send)
+      - [call](#call)
+      - [delegatecall](#delegatecall)
+      - [callcode](#callcode)
+    + [Array](#array)
+    + [Fixed byte arrays](#fixed-byte-arrays)
+    + [Dynamic byte arrays](#dynamic-byte-arrays)
+    + [Enum](#enum)
+    + [Struct](#struct)
+    + [Mapping](#mapping)
+  * [Expressions and Control Structures](#expressions-and-control-structures)
+  * [Functions](#functions)
+    + [Structure](#structure)
+    + [Access modifiers](#access-modifiers)
+    + [Function type](#function-type)
+    + [Function Modifier](#function-modifier)
+    + [View or Constant Functions](#view-or-constant-functions)
+    + [Pure Functions](#pure-functions)
+    + [Payable Functions](#payable-functions)
+    + [Fallback Function](#fallback-function)
+  * [Abstract Contracts](#abstract-contracts)
+  * [Interface](#interface)
+  * [Events](#events)
+  * [Library](#library)
+  * [Using - For](#using---for)
+  * [Error Handling](#error-handling)
+  * [Global variables](#global-variables)
+    + [Block variables](#block-variables)
+    + [Transaction variables](#transaction-variables)
+    + [Mathematical and Cryptographic Functions](#mathematical-and-cryptographic-functions)
+    + [Contract Related](#contract-related)
+- [Security](#security)
+- [Best practices](#best-practices)
 
 
 ## Version pragma
@@ -174,6 +217,9 @@ Mappings can be seen as **hash tables** which are virtually initialized such tha
 
 **key** can be almost any type except for a mapping, a dynamically sized array, a contract, an enum and a struct. **value** can actually be any type, including mappings.
 
+
+## Expressions and Control Structures
+comming soon
 
 ## Functions
 
@@ -392,3 +438,10 @@ Comming soon
 - `this (current contract’s type)`: the current contract, explicitly convertible to Address
 - `selfdestruct(address recipient)`: destroy the current contract, sending its funds to the given Address
 - `suicide(address recipient)`: alias to selfdestruct. Soon to deprecate.
+
+
+# Security 
+comming soon
+
+# Best practices
+comming soon
