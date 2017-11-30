@@ -1,6 +1,6 @@
 # Solidity Cheatsheet and Best practices
 
-Best practices and security considerations are moved to [solidity-guidelines](/solidity-security.md).
+### Best practices and security considerations are moved to [solidity-security-guidelines](/solidity-security.md).
 
 ## Motivation
 
