@@ -1,5 +1,6 @@
 # Solidity Cheatsheet and Best practices
 
+Best practices and security considerations are moved to [solidity-guidelines](/security-guidelines.md).
 
 ## Motivation
 
@@ -67,9 +68,6 @@ This guide is not intended to teach you Solidity from the ground up, but to help
     + [Transaction variables](#transaction-variables)
     + [Mathematical and Cryptographic Functions](#mathematical-and-cryptographic-functions)
     + [Contract Related](#contract-related)
-- [Security](#security)
-- [Best practices](#best-practices)
-- [Tips & Tricks](#tips---tricks)
 
 
 ## Version pragma
@@ -659,12 +657,3 @@ contract C {
 - `selfdestruct(address recipient)`: destroy the current contract, sending its funds to the given Address
 - `suicide(address recipient)`: alias to selfdestruct. Soon to deprecate.
 
-
-# Security 
-Work in progress
-
-# Best practices
-Work in progress
-
-# Tips & Tricks
-Work in progress
