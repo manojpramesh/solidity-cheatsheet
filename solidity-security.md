@@ -15,10 +15,43 @@ Solidity cheatsheet is available in [solidity-cheatsheet](/README.md).
 
 ### External calls
 
-Avoid using external calls whenever possible. Calls to untrusted code can lead to security flaw.
+Avoid using external calls whenever possible. Calls to untrusted code can lead to security flaw. When using external contract calls, assume that unsafe code might execute. Even if the contract is not malicious, malicious code can be executed by any contracts it calls.
 
 Use External calls at the bottom of the function as it will forward all the gas to the funtion.
 
+Use `<address>.call.gas(gasAmount)()` to limit sending gas to external calls.
+
+
+### Sending transaction from contracts
+
+`<address>.send()` and `<address>.transfer()` are considered safe. It has a limited gas of `2300` which is low for any task except for an event.
+
+`<address>.transfer()` will revert the transaction and `<address>.send()` will return false. Use it based on requirement.
+
 ### Error handling
 
-Comming soon
+Some functions will return false if it fails. Make sure to handle the possibility that the call will fail, by checking the return value.
+
+`call`, `callcode`, `delegatecall`, `send` are some functions that return `false` on failure.
+
+```
+// BAD
+<address>.send(10);
+
+// GOOD
+
+// Including success and failure callbaks
+if(<address>.send()) { 
+    // OnSuccess
+} else {
+    // OnFail
+}
+
+// Using assert that will revert the transaction on false
+assert(<address>.send())
+```
+
+
+### Upgrading contracts
+
+Use `delegatecall` in a proxy contract for upgrading contracts overtime.
