@@ -51,6 +51,42 @@ if(<address>.send()) {
 assert(<address>.send())
 ```
 
+### Using access modifiers
+
+Use access modifiers explicitly. Using `external` for external only function will reduce gas.
+
+```
+// BAD
+function externalFunction() {
+    // Do Something
+}
+
+// GOOD
+uint public status;
+function externalFunction() external {
+    // Do Something
+}
+```
+
+### Make use of function modifiers
+
+Use modifiers to restrict access to functions. Avoid unauthorized access for all functions. You should use `msg.sender` over `tx.origin` for authorization.
+
+```
+// BAD
+function selfdestruct() {
+    selfdestruct(<address>);
+}
+
+// GOOD
+modifier onlyOwner() {
+  require(msg.sender == <address of owner>);
+  _
+}
+function selfdestruct() onlyOwner {
+    selfdestruct(<address>);
+}
+```
 
 ### Upgrading contracts
 
