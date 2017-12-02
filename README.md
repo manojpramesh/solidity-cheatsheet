@@ -394,11 +394,11 @@ function close() onlyOwner {
 
 ### View or Constant Functions
 
-Functions can be declared `view` or `constant` in which case they promise not to modify the state.
+Functions can be declared `view` or `constant` in which case they promise not to modify the state, but can read from them.
 
 ```
 function f(uint a) view returns (uint) {
-    return a * b;
+    return a * b; // where b is a storage variable
 }
 ```
 
@@ -506,7 +506,7 @@ contract A {
     function C() returns (bytes32);
 }
 
-contract A is B {
+contract B is A {
     function C() returns (bytes32) { return "c"; }
 }
 ```
