@@ -40,7 +40,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
     + [Parameters](#parameters)
       - [Input parameters](#input-parameters)
       - [Output parameters](#output-parameters)
-    + [Contructor](#contructor)
+    + [Constructor](#constructor)
     + [Function Calls](#function-calls)
       - [Internal Function Calls](#internal-function-calls)
       - [External Function Calls](#external-function-calls)
@@ -280,7 +280,7 @@ Output can also be specified using `return` statement. In that case, we can omit
 Multiple return types are possible with `return (v0, v1, ..., vn)`.
 
 
-### Contructor
+### Constructor
 
 Function that has same name as contract. Executed during contract deployment.
 
