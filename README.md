@@ -72,7 +72,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 ## Version pragma
 
-`pragma solidity ^0.4.18;`  will compile with a compiler version  > 0.4.0 and < 0.5.0.
+`pragma solidity ^0.4.18;`  will compile with a compiler version  >= 0.4.18 and < 0.5.0.
 
 
 ## Import files
