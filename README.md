@@ -8,7 +8,7 @@ This document is a cheatsheet for **Solidity** that you can use to write **Smart
 
 This guide is not intended to teach you Solidity from the ground up, but to help developers with basic knowledge who may struggle to get familiar with Smart Contracts and Blockchain because of the Solidity concepts used.
 
-> **Note:** If you have basic knowledge in JavaScript, it is more easy to learn Solidity.
+> **Note:** If you have basic knowledge in JavaScript, it's easier to learn Solidity.
 
 
 ## Table of contents
@@ -133,7 +133,7 @@ Methods:
 
 - `<address>.delegatecall(...) returns (bool)`: issue low-level DELEGATECALL, returns false on failure
 
-Delegatecall uses code of the target address and all other aspects (storage, balance, ...) are taken from the calling contract. The purpose of delegatecall is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
+Delegatecall uses the code of the target address, taking all other aspects (storage, balance, ...) from the calling contract. The purpose of delegatecall is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
 
 ```
 contract A {
@@ -164,7 +164,7 @@ contract B {
 
 ### Array
 
-Arrays can have fixed size or they can be dynamic.
+Arrays can be dynamic or have a fixed size.
 
 ```
 uint[] dynamicSizeArray;
@@ -194,7 +194,7 @@ Members
 
 ### Enum
 
-Enum works just like every other language.
+Enum works just like in every other language.
 
 ```
 enum ActionChoices { 
@@ -226,7 +226,7 @@ Declared as `mapping(_KeyType => _ValueType)`
 
 Mappings can be seen as **hash tables** which are virtually initialized such that every possible key exists and is mapped to a value.
 
-**key** can be almost any type except for a mapping, a dynamically sized array, a contract, an enum and a struct. **value** can actually be any type, including mappings.
+**key** can be almost any type except for a mapping, a dynamically sized array, a contract, an enum, or a struct. **value** can actually be any type, including mappings.
 
 
 ## Control Structures
@@ -267,7 +267,7 @@ function f(uint _a, uint _b) {}
 
 #### Output parameters
 
-Output parameters are declared after `returns` keyword
+Output parameters are declared after the `returns` keyword
 
 ```
 function f(uint _a, uint _b) returns (uint _sum) {
@@ -299,7 +299,7 @@ contract C {
 
 #### Internal Function Calls
 
-Functions of the current contract can be called directly(internally - via jumps) and also recursively
+Functions of the current contract can be called directly (internally - via jumps) and also recursively
 
 ```
 contract C {
@@ -333,7 +333,7 @@ function g() {
 
 #### Unnamed function parameters
 
-Parameters will be present on the stack, but they are not accessible.
+Parameters will be present on the stack, but are not accessible.
 
 ```
 function f(uint a, uint) returns (uint) {
@@ -379,7 +379,7 @@ contract OracleUser {
 
 ### Function Modifier
 
-Modifier can automatically check a condition prior to executing the function.
+Modifiers can automatically check a condition prior to executing the function.
 
 ```
 modifier onlyOwner {
@@ -432,7 +432,7 @@ function() {
 
 ### Creating contracts using `new`
 
-Contract can be created from another contract using `new` keyword. Source of the contract has to be known in advance.
+Contracts can be created from another contract using `new` keyword. The source of the contract has to be known in advance.
 
 ```
 contract A {
@@ -497,7 +497,7 @@ contract B is A(1) {
 
 ### Abstract Contracts
 
-Contracts that contains implemented and non-implemented functions. Such contracts cannot be compiled, but they can be used as base contracts.
+Contracts that contain implemented and non-implemented functions. Such contracts cannot be compiled, but they can be used as base contracts.
 
 ```
 pragma solidity ^0.4.0;
@@ -534,7 +534,7 @@ interface Token {
 
 Events allow the convenient usage of the EVM logging facilities, which in turn can be used to “call” JavaScript callbacks in the user interface of a dapp, which listen for these events.
 
-Up to three parameters can receive the attribute indexed which will cause the respective arguments to be searched for
+Up to three parameters can receive the attribute indexed, which will cause the respective arguments to be searched for.
 
 > All non-indexed arguments will be stored in the data part of the log.
 
@@ -556,7 +556,7 @@ contract ClientReceipt {
 
 ## Library
 
-Libraries are similar to contracts, but they are deployed only once at a specific address and their code is used with [`delegatecall`](#delegatecall) (`callcode`). 
+Libraries are similar to contracts, but they are deployed only once at a specific address, and their code is used with [`delegatecall`](#delegatecall) (`callcode`). 
 
 ```
 library arithmatic {
@@ -617,7 +617,7 @@ contract C {
 
 ### Block variables
 
-- `block.blockhash(uint blockNumber) returns (bytes32)`: hash of the given block - only works for 256 most recent blocks excluding current
+- `block.blockhash(uint blockNumber) returns (bytes32)`: hash of the given block - only works for the 256 most recent blocks excluding current
 - `block.coinbase (address)`: current block miner’s address
 - `block.difficulty (uint)`: current block difficulty
 - `block.gaslimit (uint)`: current block gaslimit
@@ -655,5 +655,5 @@ contract C {
 ### Contract Related
 - `this (current contract’s type)`: the current contract, explicitly convertible to Address
 - `selfdestruct(address recipient)`: destroy the current contract, sending its funds to the given Address
-- `suicide(address recipient)`: alias to selfdestruct. Soon to deprecate.
+- `suicide(address recipient)`: alias to selfdestruct. Soon to be deprecated.
 
