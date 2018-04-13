@@ -72,7 +72,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 ## Version pragma
 
-`pragma solidity ^0.4.18;`  will compile with a compiler version  >= 0.4.18 and < 0.5.0.
+`pragma solidity ^0.4.21;`  will compile with a compiler version  >= 0.4.21 and < 0.5.0.
 
 
 ## Import files
@@ -549,7 +549,7 @@ contract ClientReceipt {
     );
 
     function deposit(bytes32 _id) payable {
-        Deposit(msg.sender, _id, msg.value);
+        emit Deposit(msg.sender, _id, msg.value);
     }
 }
 ```
