@@ -135,7 +135,7 @@ Methods:
 
 Delegatecall uses the code of the target address, taking all other aspects (storage, balance, ...) from the calling contract. The purpose of delegatecall is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used.
 
-```
+```solidity
 contract A {
   uint value;
   address public sender;
@@ -166,7 +166,7 @@ contract B {
 
 Arrays can be dynamic or have a fixed size.
 
-```
+```solidity
 uint[] dynamicSizeArray;
 
 uint[7] fixedSizeArray;
@@ -196,7 +196,7 @@ Members
 
 Enum works just like in every other language.
 
-```
+```solidity
 enum ActionChoices { 
   GoLeft, 
   GoRight, 
@@ -211,7 +211,7 @@ ActionChoices choice = ActionChoices.GoStraight;
 
 New types can be declared using struct.
 
-```
+```solidity
 struct Funder {
     address addr;
     uint amount;
@@ -261,7 +261,7 @@ Most of the control structures from JavaScript are available in Solidity except 
 
 Parameters are declared just like variables and are `memory` variables.
 
-```
+```solidity
 function f(uint _a, uint _b) {}
 ```
 
@@ -269,7 +269,7 @@ function f(uint _a, uint _b) {}
 
 Output parameters are declared after the `returns` keyword
 
-```
+```solidity
 function f(uint _a, uint _b) returns (uint _sum) {
    _sum = _a + _b;
 }
@@ -284,7 +284,7 @@ Multiple return types are possible with `return (v0, v1, ..., vn)`.
 
 Function that has same name as contract. Executed during contract deployment.
 
-```
+```solidity
 contract C {
    address owner;
    uint status;
@@ -301,7 +301,7 @@ contract C {
 
 Functions of the current contract can be called directly (internally - via jumps) and also recursively
 
-```
+```solidity
 contract C {
     function funA() returns (uint) { 
        return 5; 
@@ -323,7 +323,7 @@ contract C {
 
 Function call arguments can also be given by name in any order as below.
 
-```
+```solidity
 function f(uint a, uint b) {  }
 
 function g() {
@@ -335,7 +335,7 @@ function g() {
 
 Parameters will be present on the stack, but are not accessible.
 
-```
+```solidity
 function f(uint a, uint) returns (uint) {
     return a;
 }
@@ -345,7 +345,7 @@ function f(uint a, uint) returns (uint) {
 
 Pass function as a parameter to another function. Similar to `callbacks` and `delegates`
 
-```
+```solidity
 pragma solidity ^0.4.18;
 
 contract Oracle {
@@ -381,7 +381,7 @@ contract OracleUser {
 
 Modifiers can automatically check a condition prior to executing the function.
 
-```
+```solidity
 modifier onlyOwner {
     require(msg.sender == owner);
     _;
@@ -396,7 +396,7 @@ function close() onlyOwner {
 
 Functions can be declared `view` or `constant` in which case they promise not to modify the state, but can read from them.
 
-```
+```solidity
 function f(uint a) view returns (uint) {
     return a * b; // where b is a storage variable
 }
@@ -408,7 +408,7 @@ function f(uint a) view returns (uint) {
 
 Functions can be declared `pure` in which case they promise not to read from or modify the state.
 
-```
+```solidity
 function f(uint a) pure returns (uint) {
     return a * 42;
 }
@@ -422,7 +422,7 @@ Functions that receive `Ether` are marked as `payable` function.
 
 A contract can have exactly one **unnamed function**. This function cannot have arguments and cannot return anything. It is executed on a call to the contract if none of the other functions match the given function identifier (or if no data was supplied at all).
 
-```
+```solidity
 function() {
   // Do something
 }
@@ -434,7 +434,7 @@ function() {
 
 Contracts can be created from another contract using `new` keyword. The source of the contract has to be known in advance.
 
-```
+```solidity
 contract A {
     function add(uint _a, uint _b) returns (uint) {
         return _a + _b;
@@ -453,7 +453,7 @@ contract C {
 
 Solidity supports multiple inheritance and polymorphism.
 
-```
+```solidity
 contract owned {
     function owned() { owner = msg.sender; }
     address owner;
@@ -474,7 +474,7 @@ contract final is mortal {
 
 #### Multiple inheritance
 
-```
+```solidity
 contract A {}
 contract B {}
 contract C is A, B {}
@@ -482,7 +482,7 @@ contract C is A, B {}
 
 #### Constructor of base class
 
-```
+```solidity
 contract A {
     uint a;
     function A(uint _a) { a = _a; }
@@ -499,7 +499,7 @@ contract B is A(1) {
 
 Contracts that contain implemented and non-implemented functions. Such contracts cannot be compiled, but they can be used as base contracts.
 
-```
+```solidity
 pragma solidity ^0.4.0;
 
 contract A {
@@ -522,7 +522,7 @@ contract B is A {
 - Cannot define structs.
 - Cannot define enums.
 
-```
+```solidity
 pragma solidity ^0.4.11;
 
 interface Token {
@@ -538,7 +538,7 @@ Up to three parameters can receive the attribute indexed, which will cause the r
 
 > All non-indexed arguments will be stored in the data part of the log.
 
-```
+```solidity
 pragma solidity ^0.4.0;
 
 contract ClientReceipt {
@@ -558,7 +558,7 @@ contract ClientReceipt {
 
 Libraries are similar to contracts, but they are deployed only once at a specific address, and their code is used with [`delegatecall`](#delegatecall) (`callcode`). 
 
-```
+```solidity
 library arithmatic {
     function add(uint _a, uint _b) returns (uint) {
         return _a + _b;
@@ -578,7 +578,7 @@ contract C {
 
 `using A for B;` can be used to attach library functions to any type.
 
-```
+```solidity
 library arithmatic {
     function add(uint _a, uint _b) returns (uint) {
         return _a + _b;
@@ -601,7 +601,7 @@ contract C {
 - `require(bool condition)`: throws if the condition is not met - to be used for errors in inputs or external components.
 - `revert()`: abort execution and revert state changes
 
-```
+```solidity
  function sendHalf(address addr) payable returns (uint balance) {
     require(msg.value % 2 == 0); // Only allow even numbers
     uint balanceBeforeTransfer = this.balance;
