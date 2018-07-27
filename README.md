@@ -1,7 +1,5 @@
 # Solidity Cheatsheet and Best practices
 
-### Best practices and security considerations are moved to [solidity-security-guidelines](/solidity-security.md).
-
 ## Motivation
 
 This document is a cheatsheet for **Solidity** that you can use to write **Smart Contracts** for **Ethereum** based blockchain.
@@ -282,13 +280,13 @@ Multiple return types are possible with `return (v0, v1, ..., vn)`.
 
 ### Constructor
 
-Function that has same name as contract. Executed during contract deployment.
+Function that is executed during contract deployment. Defined using the `constructor` keyword.
 
 ```solidity
 contract C {
    address owner;
    uint status;
-   function C(uint _status) {
+   constructor(uint _status) {
        owner = msg.sender;
        status = _status;
    }
@@ -485,11 +483,11 @@ contract C is A, B {}
 ```solidity
 contract A {
     uint a;
-    function A(uint _a) { a = _a; }
+    constructor(uint _a) { a = _a; }
 }
 
 contract B is A(1) {
-    function B(uint _b) A(_b) {
+    constructor(uint _b) A(_b) {
     }
 }
 ```
