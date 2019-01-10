@@ -70,7 +70,7 @@ This guide is not intended to teach you Solidity from the ground up, but to help
 
 ## Version pragma
 
-`pragma solidity ^0.4.21;`  will compile with a compiler version  >= 0.4.21 and < 0.5.0.
+`pragma solidity ^0.5.2;`  will compile with a compiler version  >= 0.5.2 and < 0.6.0.
 
 
 ## Import files
@@ -108,6 +108,7 @@ Operators:
 ### Address
 
 `address`: Holds an Ethereum address (20 byte value).
+`address payable` : Same as address, but includes additional methods `transfer` and `send`
 
 Operators:
 
@@ -137,16 +138,18 @@ Delegatecall uses the code of the target address, taking all other aspects (stor
 contract A {
   uint value;
   address public sender;
-  address a = "0x"; // address of contract B
-  function makeDelegateCall(uint _value) {
-    a.delegatecall(bytes4(keccak256("setValue(uint)")), _value); // Value of A is modified
+  address a = address(0); // address of contract B
+  function makeDelegateCall(uint _value) public {
+    a.delegatecall(
+        abi.encodePacked(bytes4(keccak256("setValue(uint)")), _value)
+    ); // Value of A is modified
   }
 }
 
 contract B {
   uint value;
   address public sender;
-  setValue(uint _value) {
+  function setValue(uint _value) public {
     value = _value;
     sender = msg.sender; // msg.sender is preserved in delegatecall. It was not available in callcode.
   }
