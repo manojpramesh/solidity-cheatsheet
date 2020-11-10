@@ -97,7 +97,7 @@ Operators:
 
 Unsigned : `uint8 | uint16 | uint32 | uint64 | uint128 | uint256(uint)`
 
-Signed   : `int8  | int16  | int32  | int64  | int128  | int256(uint) `
+Signed   : `int8  | int16  | int32  | int64  | int128  | int256(int) `
 
 Operators:
 
