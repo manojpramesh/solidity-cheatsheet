@@ -419,14 +419,23 @@ function f(uint a) pure returns (uint) {
 
 Functions that receive `Ether` are marked as `payable` function.
 
-### Fallback Function
+### Receive and Fallback functions
 
-A contract can have exactly one **unnamed function**. This function cannot have arguments and cannot return anything. It is executed on a call to the contract if none of the other functions match the given function identifier (or if no data was supplied at all).
+> These functions do not receive an `function` keyword as they are built-in in solidity.
+
+**receive**
+*The receive function is executed on a call to the contract with empty calldata. This is the function that is executed on plain Ether transfers (e.g. via .send() or .transfer()). If no such function exists, but a payable fallback function exists, the fallback function will be called on a plain Ether transfer. If neither a receive Ether nor a payable fallback function is present, the contract cannot receive Ether through regular transactions and throws an exception.*
 
 ```solidity
-function() {
-  // Do something
-}
+// for empty calldata (and any value)
+receive() external payable { ... }
+```
+
+**fallback**
+*The fallback function is executed on a call to the contract if none of the other functions match the given function signature, or if no data was supplied at all and there is no receive Ether function. The fallback function always receives data, but in order to also receive Ether it must be marked payable.*
+```solidity
+// If the receive function is undefined in the contract, the fallback function also takes over the function of receive.
+fallback() external payable { ... }
 ```
 
 ## Contracts
