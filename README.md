@@ -517,7 +517,7 @@ contract B is A {
 `Interfaces` are similar to abstract contracts, but they have restrictions:
 
 - Cannot have any functions implemented.
-- Cannot inherit other contracts or interfaces.
+- Can inherit from other interfaces cannot inheriting from other contracts
 - Cannot define constructor.
 - Cannot define variables.
 - Cannot define structs.
